@@ -1,0 +1,7 @@
+{
+    "type" : "validate",
+    "user" : {
+        "email" : "s3850471@student.rmit.edu.au",
+        "password" : "123456"
+    }
+}

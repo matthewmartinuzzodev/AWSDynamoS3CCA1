@@ -1,0 +1,8 @@
+{
+    "type" : "register",
+    "user" : {
+        "email" : "newUser1@student.rmit.edu.au",
+        "user_name" : "newUser1",
+        "password" : "newUser1"
+    }
+}
