@@ -148,6 +148,7 @@ function App() {
   const handleLogout = (e) => {
     e.preventDefault();
     setLoginState(false);
+    setSubscriptionsState([])
   }
 
   //subscribe handling
@@ -166,7 +167,8 @@ function App() {
         "email": data.email
       }
       axios.post("https://3s8n7adz6i.execute-api.us-east-1.amazonaws.com/Production/subscriptionLambdaFunctions", userData2).then((response) => {
-        setSubscriptionsState(response.data.body.Response)
+        console.log(userData2);
+        setSubscriptionsState(response.data.body.Response);
       });
     });
   }

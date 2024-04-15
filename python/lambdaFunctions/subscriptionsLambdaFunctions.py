@@ -22,6 +22,12 @@ def lambda_handler(event, context):
         ## email exists in database
         if (tableQuery['Count'] == 1):
             oldListString = tableQuery['Items'][0]['titles']
+            oldListString = oldListString.replace("Summer of '69", "Summer of 69")
+            oldListString = oldListString.replace("Don't Stop Believin'", "Dont Stop Believin")
+            oldListString = oldListString.replace("I Won't Give Up", "I Wont Give Up")
+            oldListString = oldListString.replace("The Lion's Roar", "The Lions Roar")
+            oldListString = oldListString.replace("We're Going To Be Friends", "Were Going To Be Friends")
+
             oldList = ast.literal_eval(oldListString)
             if (musicTitle in oldList):
                 resp = {
@@ -39,12 +45,18 @@ def lambda_handler(event, context):
                 oldList.append(musicTitle)
                 newListString = '['
                 for index, title in enumerate(oldList):
-                    newListString += "'"
+                    newListString += '"'
                     newListString += title
-                    newListString += "'"
+                    newListString += '"'
                     if index != len(oldList) - 1:
                         newListString += ','
                 newListString += ']'
+                newListString = newListString.replace("Summer of 69", "Summer of '69")
+                newListString = newListString.replace("Dont Stop Believin", "Don't Stop Believin'")
+                newListString = newListString.replace("I Wont Give Up", "I Won't Give Up")
+                newListString = newListString.replace("The Lions Roar", "The Lion's Roar")
+                newListString = newListString.replace("Were Going To Be Friends", "We're Going To Be Friends")
+                
                 table.update_item(
                     Key={
                         "email" : userEmail
@@ -89,7 +101,29 @@ def lambda_handler(event, context):
         oldListString = tableQuery = table.query(
             KeyConditionExpression=Key('email').eq(userEmail)
         )['Items'][0]['titles']
+        oldListString = oldListString.replace("Summer of '69", "Summer of 69")
+        oldListString = oldListString.replace("Don't Stop Believin'", "Dont Stop Believin")
+        oldListString = oldListString.replace("I Won't Give Up", "I Wont Give Up")
+        oldListString = oldListString.replace("The Lion's Roar", "The Lions Roar")
+        oldListString = oldListString.replace("We're Going To Be Friends", "Were Going To Be Friends")
+        
         oldList = ast.literal_eval(oldListString)
+        if "Summer of 69" in oldList:
+            oldList[oldList.index("Summer of 69")] = "Summer of '69"
+        
+        if "Dont Stop Believin" in oldList:
+            oldList[oldList.index("Dont Stop Believin")] = "Don't Stop Believin'"
+            
+        if "I Wont Give Up" in oldList:
+            oldList[oldList.index("I Wont Give Up")] = "I Won't Give Up"
+        
+        if "The Lions Roar" in oldList:
+            oldList[oldList.index("The Lions Roar")] = "The Lion's Roar"
+            
+        if "Were Going To Be Friends" in oldList:
+            oldList[oldList.index("Were Going To Be Friends")] = "We're Going To Be Friends"
+        
+            
         if musicTitle in oldList:
             oldList.remove(musicTitle)
             newListString = '['
@@ -136,8 +170,31 @@ def lambda_handler(event, context):
         )
         if (tableQuery['Count'] == 1):
             oldListString = tableQuery['Items'][0]['titles']
+            print("pre:", oldListString)
+            print("Don't Stop Believin'" in oldListString)
+            oldListString = oldListString.replace("Summer of '69", "Summer of 69")
+            oldListString = oldListString.replace("Don't Stop Believin'", "Dont Stop Believin")
+            oldListString = oldListString.replace("I Won't Give Up", "I Wont Give Up")
+            oldListString = oldListString.replace("The Lion's Roar", "The Lions Roar")
+            oldListString = oldListString.replace("We're Going To Be Friends", "Were Going To Be Friends")
             print(oldListString)
             oldList = ast.literal_eval(oldListString)
+            if "Summer of 69" in oldList:
+                oldList[oldList.index("Summer of 69")] = "Summer of '69"
+            
+            if "Dont Stop Believin" in oldList:
+                oldList[oldList.index("Dont Stop Believin")] = "Don't Stop Believin'"
+                            
+            if "I Wont Give Up" in oldList:
+                oldList[oldList.index("I Wont Give Up")] = "I Won't Give Up"
+            
+            if "The Lions Roar" in oldList:
+                oldList[oldList.index("The Lions Roar")] = "The Lion's Roar"
+                
+            if "Were Going To Be Friends" in oldList:
+                oldList[oldList.index("Were Going To Be Friends")] = "We're Going To Be Friends"
+            
+                
             resp = {
                     'statusCode': 200,
                     'headers': {
