@@ -38,11 +38,12 @@ def lambda_handler(event, context):
             else:
                 oldList.append(musicTitle)
                 newListString = '['
-                for title in oldList:
+                for index, title in enumerate(oldList):
                     newListString += "'"
                     newListString += title
                     newListString += "'"
-                    newListString += ','
+                    if index != len(oldList) - 1:
+                        newListString += ','
                 newListString += ']'
                 table.update_item(
                     Key={
@@ -135,6 +136,7 @@ def lambda_handler(event, context):
         )
         if (tableQuery['Count'] == 1):
             oldListString = tableQuery['Items'][0]['titles']
+            print(oldListString)
             oldList = ast.literal_eval(oldListString)
             resp = {
                     'statusCode': 200,

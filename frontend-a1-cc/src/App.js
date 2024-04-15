@@ -52,8 +52,10 @@ function App() {
             "email": data.email
           }
           axios.post("https://3s8n7adz6i.execute-api.us-east-1.amazonaws.com/Production/subscriptionLambdaFunctions", userData).then((response) => {
-            if (response.data.body.Response != "email doesnt exist") {
-              setSubscriptionsState(response.data.body.Response)
+            if(response){
+              if (response.data.body.Response != "email doesnt exist") {
+                setSubscriptionsState(response.data.body.Response)
+              }
             }
           });
         }
