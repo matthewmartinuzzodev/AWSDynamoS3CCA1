@@ -109,19 +109,19 @@ function App() {
           !loginState && !registerState &&
           <form>
             <label>
-              Login Here:
+              <p className='font-bold text-purple-950 text-3xl'>Login Here:</p>
               <br></br>
-              email: <input name='email' type='email' value={data.email} onChange={handleChange} />
+              <input className='border-2 border-slate-500 rounded my-1' placeholder='email' name='email' type='email' value={data.email} onChange={handleChange} />
               <br></br>
-              password: <input name='password' type='password' value={data.password} onChange={handleChange} />
+              <input className='border-2 border-slate-500 rounded' placeholder='password' name='password' type='password' value={data.password} onChange={handleChange} />
               <br></br>
               {
                 failedLogin &&
                 <p className=' text-red-500'>email or password is invalid</p>
               }
-              <button type='submit' onClick={handleSubmitLogin}>Login</button>
+              <button className='font-bold bg-slate-500 rounded-3xl text-white w-32 my-1' type='submit' onClick={handleSubmitLogin}>Login</button>
               <br></br>
-              <button type='button' onClick={handleSubmitRegister}>Register</button>
+              <button className='font-bold bg-slate-500 rounded-3xl text-white w-32' type='button' onClick={handleSubmitRegister}>Register</button>
             </label>
          </form>
         }
@@ -129,13 +129,13 @@ function App() {
           registerState &&
           <form>
               <label>
-                Register Here:
+                <p className='font-bold text-purple-950 text-3xl'>Register Here:</p>
                 <br></br>
-                email: <input name='email' type='email' value={dataRegister.email} onChange={handleChangeRegisterForm} />
+                <input className='border-2 border-slate-500 rounded my-1' placeholder='email' name='email' type='email' value={dataRegister.email} onChange={handleChangeRegisterForm} />
                 <br></br>
-                username: <input name='username' type='username' value={dataRegister.username} onChange={handleChangeRegisterForm} />
+                <input className='border-2 border-slate-500 rounded mb-1' placeholder='username' name='username' type='username' value={dataRegister.username} onChange={handleChangeRegisterForm} />
                 <br></br>
-                password: <input name='password' type='password' value={dataRegister.password} onChange={handleChangeRegisterForm} />
+                <input className='border-2 border-slate-500 rounded' placeholder='password' name='password' type='password' value={dataRegister.password} onChange={handleChangeRegisterForm} />
                 <br></br>
                 {
                   invalidRegister &&
@@ -145,7 +145,7 @@ function App() {
                   registerNotComplete &&
                   <p className=' text-red-500'>Please fill in all fields</p>
                 }
-                <button type='button' onClick={handleSubmitRegisterForm}>Register</button>
+                <button className='font-bold bg-slate-500 rounded-3xl text-white w-32 my-1' type='button' onClick={handleSubmitRegisterForm}>Register</button>
             </label>
           </form>
         }
@@ -155,6 +155,7 @@ function App() {
             <p>welcome, you have logged in &nbsp;</p>
             <p className='text-violet-950 font-extrabold'>{username}</p>
           </div>
+          
         }
       </body>
     </div>
