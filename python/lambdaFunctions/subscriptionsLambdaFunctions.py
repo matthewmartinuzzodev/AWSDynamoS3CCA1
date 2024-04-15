@@ -11,11 +11,11 @@ import ast
 def lambda_handler(event, context):
     type = event['type']
     userEmail = event['email']
-    musicTitle = event['title']
     client = boto3.resource('dynamodb')
     table = client.Table('subscription')
     
     if type == "subscribe":
+        musicTitle = event['title']
         tableQuery = table.query(
             KeyConditionExpression=Key('email').eq(userEmail)
         )
@@ -84,6 +84,7 @@ def lambda_handler(event, context):
                 }
             }
     if type == "remove":
+        musicTitle = event['title']
         oldListString = tableQuery = table.query(
             KeyConditionExpression=Key('email').eq(userEmail)
         )['Items'][0]['titles']
@@ -127,8 +128,38 @@ def lambda_handler(event, context):
                     'Response' : (musicTitle + " not in " + userEmail)
                 }
             }
-        
-        
+    
+    if type == "info":
+        tableQuery = table.query(
+            KeyConditionExpression=Key('email').eq(userEmail)
+        )
+        if (tableQuery['Count'] == 1):
+            oldListString = tableQuery['Items'][0]['titles']
+            oldList = ast.literal_eval(oldListString)
+            resp = {
+                    'statusCode': 200,
+                    'headers': {
+                        'Access-Control-Allow-Headers': 'Content-Type',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': '*'
+                    },
+                    'body': {
+                        'Response' : oldList
+                    }
+                }
+        else:
+            resp = {
+                    'statusCode': 200,
+                    'headers': {
+                        'Access-Control-Allow-Headers': 'Content-Type',
+                        'Access-Control-Allow-Origin': '*',
+                        'Access-Control-Allow-Methods': '*'
+                    },
+                    'body': {
+                        'Response' : 'email doesnt exist'
+                    }
+                }
+            
         
     return resp
         

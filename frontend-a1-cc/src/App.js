@@ -1,6 +1,6 @@
 import './App.css';
 import axios from 'axios';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 
 function App() {
@@ -21,6 +21,9 @@ function App() {
       [e.target.name] : value
     });
   };
+
+  //when login, also setSubscriptions...
+  const [subscriptions, setSubscriptionsState] = useState();
   const handleSubmitLogin = (e) => {
     e.preventDefault();
     const userData = {
@@ -36,12 +39,21 @@ function App() {
     else {
       axios.post("https://lguwvr27be.execute-api.us-east-1.amazonaws.com/Production/loginUserLambdaFunctions", userData).then((response) => {
         // console.log(userData)
-        console.log("response data: ", response.data)
+        // console.log("response data: ", response.data)
         setLoginState(response.data.body.Valid);
         setUsername(response.data.body.username)
-  
+        
         if (!response.data.body.Valid){
           setFailedLoginState(true);
+        }
+        else{
+          const userData = {
+            "type": "info",
+            "email": data.email
+          }
+          axios.post("https://3s8n7adz6i.execute-api.us-east-1.amazonaws.com/Production/subscriptionLambdaFunctions", userData).then((response) => {
+            setSubscriptionsState(response.data.body.Response)
+          });
         }
       });
     }
@@ -134,6 +146,47 @@ function App() {
     setLoginState(false);
   }
 
+  //subscribe handling
+
+  const handleSubscribe = (e) => {
+    e.preventDefault();
+    const userData = {
+      "type": "subscribe",
+      "title": e.target.name,
+      "email": data.email
+    }
+    // console.log(userData)
+    axios.post("https://3s8n7adz6i.execute-api.us-east-1.amazonaws.com/Production/subscriptionLambdaFunctions", userData).then(()=>{
+      const userData2 = {
+        "type": "info",
+        "email": data.email
+      }
+      axios.post("https://3s8n7adz6i.execute-api.us-east-1.amazonaws.com/Production/subscriptionLambdaFunctions", userData2).then((response) => {
+        setSubscriptionsState(response.data.body.Response)
+      });
+    });
+  }
+  const handleRemove = (e) =>  {
+    e.preventDefault();
+    const userData = {
+      "type": "remove",
+      "title": e.target.name,
+      "email": data.email
+    }
+    // console.log(e);
+    // console.log(userData)
+    axios.post("https://3s8n7adz6i.execute-api.us-east-1.amazonaws.com/Production/subscriptionLambdaFunctions", userData).then(() => {
+      const userData2 = {
+        "type": "info",
+        "email": data.email
+      }
+      axios.post("https://3s8n7adz6i.execute-api.us-east-1.amazonaws.com/Production/subscriptionLambdaFunctions", userData2).then((response) => {
+        setSubscriptionsState(response.data.body.Response)
+      });
+    })
+  }
+  
+
   return (
     <div className="App">
       <head>
@@ -200,6 +253,21 @@ function App() {
             </div>
             <div className=''>
               <h1 className=' text-red-950 font-extrabold text-2xl'>Subscriptions</h1>
+              {
+                subscriptions && subscriptions.map((music,id) => {
+                  return(
+                    <div key={id} className=' border-2 m-2 flex flex-row'>
+                      <div className=' flex-auto'>
+                        <img src={`https://matthewmartinuzzoimagesbucket.s3.amazonaws.com/${music.replace("#", "%23")}.jpg`}></img>
+                      </div>
+                      <div className=' flex-auto self-center'>
+                        <h1 className='font-bold'>{music}</h1>
+                        <button className='font-bold bg-slate-300 rounded-3xl text-white w-32 my-1' type='button' name={`${music}`} onClick={handleRemove}>Remove</button>
+                      </div>
+                    </div>
+                  );
+                })
+              }
             </div>
             <div className='flex flex-col'>
               <div>
@@ -228,7 +296,7 @@ function App() {
                         <h1 className='font-bold'>{music.title}</h1>
                         <p>{music.artist}</p>
                         <p>{music.year}</p>
-                        <button className='font-bold bg-slate-300 rounded-3xl text-white w-32 my-1' type='button'>Subscribe</button>
+                        <button className='font-bold bg-slate-300 rounded-3xl text-white w-32 my-1' type='button' name={`${music.title}`} onClick={handleSubscribe}>Subscribe</button>
                       </div>
                       
                     </div>
