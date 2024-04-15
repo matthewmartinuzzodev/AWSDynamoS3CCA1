@@ -1,7 +1,24 @@
-WINDOWS
-
+WINDOWS 
+SCRIPTS FOR Dynamo + S3
 py -m venv .venv
 
 .venv\Scripts\activate
 
 py -m pip install -r requirements.txt
+
+
+FRONTEND
+in package.json please include
+      "homepage": "<website address (public ipv4 of server)>",
+
+BACKEND
+in server:
+
+sudo add-apt-repository ppa:linuxuprising/java
+sudo apt update
+sudo apt upgrade
+sudo apt install oracle-java17-installer
+sudo apt-get install apache2
+sudo apt-get install php libapache2-mod-php
+sudo a2enmod mpm_prefork && sudo a2enmod php8.1
+sudo service apache2 start
