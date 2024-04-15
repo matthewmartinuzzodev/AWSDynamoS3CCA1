@@ -14,14 +14,6 @@ def lambda_handler(event, context):
     client = boto3.resource('dynamodb')
     table = client.Table('login')
     if type == "validate":
-        # correctPassword = table.get_item(
-        #     Key={
-        #         'email' : userEmail,
-        #         'user_name' : 'Matthew Martinuzzo1'
-        #     }
-        # )['Item']['password']
-        # if (correctPassword == userPassword):
-        #     resp = True;
         tableQuery = table.query(
             KeyConditionExpression=Key('email').eq(userEmail)
         )
@@ -36,6 +28,7 @@ def lambda_handler(event, context):
                 },
                 'body': {
                     'Valid' : True,
+                    'username' : tableQuery['Items'][0]['user_name']
                 }
             }
         else:
@@ -53,13 +46,11 @@ def lambda_handler(event, context):
         
     elif type == "register":
         userName = user['user_name']
-        try:
-            tableQuery = table.get_item(
-                Key = {
-                    'email' : userEmail,
-                    'user_name' : userName
-                }
-            )['Item']
+        
+        tableQuery = table.query(
+            KeyConditionExpression=Key('email').eq(userEmail)
+        )
+        if tableQuery['Count'] == 1:
             
             resp = {
                 'statusCode': 200,
@@ -72,7 +63,7 @@ def lambda_handler(event, context):
                     'Response' : 'Email already exists in database',
                 }
             }
-        except:
+        else:
             table.put_item(
                 Item = {
                     'email' : userEmail,

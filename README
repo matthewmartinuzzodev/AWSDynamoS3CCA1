@@ -16,6 +16,9 @@ tailwind install process
 npm install -D tailwindcss
 npx tailwindcss init
 
+// to manage http requests
+npm install axios
+
 BACKEND
 in server:
 
