@@ -128,6 +128,12 @@ function App() {
     });
   }
 
+  //logout
+  const handleLogout = (e) => {
+    e.preventDefault();
+    setLoginState(false);
+  }
+
   return (
     <div className="App">
       <head>
@@ -188,6 +194,9 @@ function App() {
                 <p>welcome, you have logged in &nbsp;</p>
                 <p className='text-violet-950 font-extrabold'>{username}</p>
               </div>
+              <div>
+                <button className='font-bold bg-slate-300 rounded-3xl text-white w-32 my-1' type='button' onClick={handleLogout}>Logout</button>
+              </div>
             </div>
             <div className=''>
               <h1 className=' text-red-950 font-extrabold text-2xl'>Subscriptions</h1>
@@ -211,16 +220,23 @@ function App() {
               {
                 queryResults && queryResults.map((music, id) => {
                   return(
-                    <div key={id} className=' border-2 m-2'>
-                      <h1 className='font-bold'>{music.title}</h1>
-                      <p>{music.artist}</p>
-                      <p>{music.year}</p>
+                    <div key={id} className=' border-2 m-2 flex flex-row'>
+                      <div className=' flex-auto'>
+                        <img src={`https://matthewmartinuzzoimagesbucket.s3.amazonaws.com/${music.title.replace("#", "%23")}.jpg`}></img>
+                      </div>
+                      <div className=' flex-auto self-center'>
+                        <h1 className='font-bold'>{music.title}</h1>
+                        <p>{music.artist}</p>
+                        <p>{music.year}</p>
+                        <button className='font-bold bg-slate-300 rounded-3xl text-white w-32 my-1' type='button'>Subscribe</button>
+                      </div>
+                      
                     </div>
                   );
                 })
               }
               {
-                queryResults.length == 0 &&
+                queryResults && queryResults.length == 0 &&
                 <p>No result is retrieved. Please query again</p>
               }
               </div>
@@ -231,17 +247,6 @@ function App() {
           
         }
       </body>
-    </div>
-  );
-}
-
-function SearchResult(music) {
-
-  return (
-    <div>
-      <h1>{music.title}</h1>
-      <p>{music.artist}</p>
-      <p>{music.year}</p>
     </div>
   );
 }
