@@ -11,6 +11,11 @@ FRONTEND
 in package.json please include
       "homepage": "<website address (public ipv4 of server)>",
 
+tailwind install process
+
+npm install -D tailwindcss
+npx tailwindcss init
+
 BACKEND
 in server:
 
