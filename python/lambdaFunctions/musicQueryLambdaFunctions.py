@@ -16,6 +16,13 @@ def lambda_handler(event, context):
     client = boto3.resource('dynamodb')
     table = client.Table('music')
     
+    if title == "":
+        title = None
+    if year == "":
+        year = None
+    if artist == "":
+        artist = None
+    
     if type == "query":
         if title and year and artist:
             tableQuery = table.query(

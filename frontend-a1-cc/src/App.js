@@ -98,6 +98,36 @@ function App() {
     }
   }
 
+  //query functions/states
+  const [queryMusic, setQueryMusicState] = useState({
+    title: "",
+    artist: "",
+    year: ""
+  });
+
+  const [queryResults, setQueryResults] = useState()
+  const handleQueryChange = (e) => {
+    e.preventDefault();
+    const value = e.target.value;
+    setQueryMusicState({
+      ...queryMusic,
+      [e.target.name] : value
+    });
+  };
+  const handleQuerySubmitForm = (e) => {
+    e.preventDefault();
+    const userData = {
+      "type": "query",
+      "title": queryMusic.title,
+      "artist": queryMusic.artist,
+      "year": queryMusic.year
+    };
+    // console.log(userData)
+    axios.post("https://z1cu5gcf0d.execute-api.us-east-1.amazonaws.com/Production/queryMusicLambdaFunction", userData).then((response) => {
+      setQueryResults(response.data.body.Response)
+    });
+  }
+
   return (
     <div className="App">
       <head>
@@ -151,13 +181,67 @@ function App() {
         }
         {
           loginState &&
-          <div className='flex flex-row justify-center'>
-            <p>welcome, you have logged in &nbsp;</p>
-            <p className='text-violet-950 font-extrabold'>{username}</p>
+          <div className='flex flex-col justify-center h-full mx-64'>
+            <div className=''>
+              <h1 className=' text-red-950 font-extrabold text-2xl'>User</h1>
+              <div className='flex flex-row justify-center'>
+                <p>welcome, you have logged in &nbsp;</p>
+                <p className='text-violet-950 font-extrabold'>{username}</p>
+              </div>
+            </div>
+            <div className=''>
+              <h1 className=' text-red-950 font-extrabold text-2xl'>Subscriptions</h1>
+            </div>
+            <div className='flex flex-col'>
+              <div>
+                <h1 className=' text-red-950 font-extrabold text-2xl'>Query</h1>
+                <form>
+                  <label>
+                    <input className='border-2 border-slate-500 rounded my-1' placeholder='title' name='title' type='title' value={queryMusic.email} onChange={handleQueryChange} />
+                    <br></br>
+                    <input className='border-2 border-slate-500 rounded mb-1' placeholder='year' name='year' type='year' value={queryMusic.username} onChange={handleQueryChange} />
+                    <br></br>
+                    <input className='border-2 border-slate-500 rounded' placeholder='artist' name='artist' type='artist' value={queryMusic.password} onChange={handleQueryChange} />
+                    <br></br>
+                    <button className='font-bold bg-slate-500 rounded-3xl text-white w-32 my-1' type='button' onClick={handleQuerySubmitForm}>Query</button>
+                  </label>
+                </form>
+              </div>
+              <div> 
+              {
+                queryResults && queryResults.map((music, id) => {
+                  return(
+                    <div key={id} className=' border-2 m-2'>
+                      <h1 className='font-bold'>{music.title}</h1>
+                      <p>{music.artist}</p>
+                      <p>{music.year}</p>
+                    </div>
+                  );
+                })
+              }
+              {
+                queryResults.length == 0 &&
+                <p>No result is retrieved. Please query again</p>
+              }
+              </div>
+            </div>
           </div>
+
+          
           
         }
       </body>
+    </div>
+  );
+}
+
+function SearchResult(music) {
+
+  return (
+    <div>
+      <h1>{music.title}</h1>
+      <p>{music.artist}</p>
+      <p>{music.year}</p>
     </div>
   );
 }
